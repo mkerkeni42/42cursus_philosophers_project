@@ -6,7 +6,7 @@
 #    By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 12:09:59 by mkerkeni          #+#    #+#              #
-#    Updated: 2023/11/07 12:19:19 by mkerkeni         ###   ########.fr        #
+#    Updated: 2023/11/09 14:53:29 by mkerkeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,14 @@ NAME = philo
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS = philo.c \
+SRCS = 	philo.c \
+		philo_utils.c \
+		parsing.c \
 
 OBJS = $(SRCS:.c=.o)
 
 .c.o:
-	@$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
+	@$(CC) $(CFLAGS) -lpthread -c $< -o $(<:.c=.o)
 
 all: $(NAME)
 

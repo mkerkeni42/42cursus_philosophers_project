@@ -6,7 +6,7 @@
 #    By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 12:09:59 by mkerkeni          #+#    #+#              #
-#    Updated: 2023/11/09 14:53:29 by mkerkeni         ###   ########.fr        #
+#    Updated: 2023/11/14 15:29:01 by mkerkeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ CFLAGS = -Wall -Wextra -Werror
 SRCS = 	philo.c \
 		philo_utils.c \
 		parsing.c \
+		simulation.c \
+		time.c \
 
 OBJS = $(SRCS:.c=.o)
 

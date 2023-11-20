@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:16:17 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/11/14 15:29:40 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/11/20 14:51:06 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@
 
 typedef struct s_rules {
 	int				nb_of_philo;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
+	long int		time_to_die;
+	long int		time_to_eat;
+	long int		time_to_sleep;
 	int				min_eat_nb;
 	int				eat_counter;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	printer;
 }					t_rules;
 
 typedef struct s_philo {
@@ -37,7 +38,7 @@ typedef struct s_philo {
 	t_rules			*rules;
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	right_fork;
-	struct timeval	*start_time;
+	long int		start_time;
 }					t_philo;
 
 int			main(int ac, char **av);
@@ -49,6 +50,7 @@ int			parsing(int ac, char **av);
 
 void		*philo_life(void *arg);
 
-long		get_time(struct timeval *cmp_time);
+long		get_time(void);
+void		ft_usleep(long int start_time, long int needed_time);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:15:19 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/11/20 15:10:32 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/11/23 15:26:53 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,25 @@
 
 static void	get_forks(t_rules *rules, t_philo *philo, int i)
 {
-	philo[i].left_fork = rules->forks[i];
+	philo[i].left_fork = &rules->forks[i];
 	if (i == 0)
-		philo[i].right_fork = rules->forks[rules->nb_of_philo - 1];
+		philo[i].right_fork = &rules->forks[rules->nb_of_philo - 1];
 	else
-		philo[i].right_fork = rules->forks[i - 1];
+		philo[i].right_fork = &rules->forks[i - 1];
 }
 
 static int	create_philos(t_rules *rules)
 {
 	t_philo			*philo;
+	pthread_t		death;
 	int				i;
 
 	i = -1;
 	philo = malloc(sizeof(t_philo) * rules->nb_of_philo);
 	while (++i < rules->nb_of_philo)
 	{
+		philo[i].eat_counter = 0;
+		philo[i].last_meal = 0;
 		philo[i].id = i + 1;
 		philo[i].rules = rules;
 		philo[i].start_time = get_time();
@@ -37,12 +40,9 @@ static int	create_philos(t_rules *rules)
 		if (pthread_create(&philo[i].thread, NULL, &philo_life, &philo[i]))
 			write(2, "Failed to create thread\n", 25);
 	}
-	i = -1;
-	while (++i < rules->nb_of_philo)
-	{
-		if (pthread_join(philo[i].thread, NULL))
-			write(2, "Failed to wait for the thread to finish\n", 41);
-	}
+	pthread_create(&death, NULL, &death_handler, philo);
+	if (pthread_join(death, NULL))
+		write(2, "Failed to wait for the thread to finish\n", 41);
 	free(philo);
 	return (0);
 }
@@ -56,7 +56,6 @@ static int	init_rules(t_rules *rules, int ac, char **av)
 	rules->time_to_die = ft_atol(av[2]);
 	rules->time_to_eat = ft_atol(av[3]);
 	rules->time_to_sleep = ft_atol(av[4]);
-	rules->eat_counter = 0;
 	if (ac == 6)
 		rules->min_eat_nb = ft_atol(av[5]);
 	else

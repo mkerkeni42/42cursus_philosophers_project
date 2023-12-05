@@ -6,13 +6,13 @@
 #    By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 12:09:59 by mkerkeni          #+#    #+#              #
-#    Updated: 2023/11/14 15:29:01 by mkerkeni         ###   ########.fr        #
+#    Updated: 2023/12/05 10:16:06 by mkerkeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -g3
 
 SRCS = 	philo.c \
 		philo_utils.c \

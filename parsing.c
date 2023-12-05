@@ -6,13 +6,13 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 14:51:43 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/11/09 15:00:07 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/04 14:11:19 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	check_if_nb(char *arg)
+static int	check_if_nb(char *arg)
 {
 	int	i;
 
@@ -30,6 +30,29 @@ int	check_if_nb(char *arg)
 	return (EXIT_SUCCESS);
 }
 
+static int	check_if_valid_nb(char *arg)
+{
+	long	nb;
+
+	nb = ft_atol(arg);
+	if (nb < 0)
+	{
+		write(2, "ERROR: positive argument required !\n", 36);
+		return (EXIT_FAILURE);
+	}
+	if (nb > INT_MAX)
+	{
+		write(2, "ERROR: argument too big !\n", 26);
+		return (EXIT_FAILURE);
+	}
+	if (nb == 0)
+	{
+		write(2, "ERROR: argument cannot be zero !\n", 34);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
 int	parsing(int ac, char **av)
 {
 	int	i;
@@ -38,22 +61,19 @@ int	parsing(int ac, char **av)
 	if (ac != 5 && ac != 6)
 	{
 		write(2, "ERROR: bad number of arguments !\n", 33);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	while (++i < ac)
 	{
 		if (check_if_nb(av[i]))
 			return (EXIT_FAILURE);
-		if (ft_atol(av[i]) < 0)
-		{
-			write(2, "ERROR: positive argument required !\n", 36);
+		if (check_if_valid_nb(av[i]))
 			return (EXIT_FAILURE);
-		}
-		if (ft_atol(av[i]) > INT_MAX)
-		{
-			write(2, "ERROR: argument too big !\n", 26);
-			return (EXIT_FAILURE);
-		}
+	}
+	if (ft_atol(av[1]) > 200)
+	{
+		write(2, "ERROR: more than 200 philosophers not allowed !\n", 49);
+		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }

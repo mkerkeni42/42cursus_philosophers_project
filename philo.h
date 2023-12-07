@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:16:17 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/05 10:19:46 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/07 13:09:42 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ typedef struct s_rules {
 	int				min_eat_nb;
 	int				death_signal;
 	long int		start_time;
+	int				running_threads;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*printer;
 	pthread_mutex_t	*death_access;
+	pthread_mutex_t	*end_lock;
 }					t_rules;
 
 typedef struct s_philo {
@@ -46,17 +48,26 @@ typedef struct s_philo {
 	pthread_mutex_t	*meal_access;
 }					t_philo;
 
+typedef struct s_fork {
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
+}					t_fork;
+
 int			main(int ac, char **av);
 
 long int	ft_atol(const char *str);
-void		free_mutexes(t_rules *rules, t_philo *philo);
 
 int			parsing(int ac, char **av);
 
+void		free_mutexes(t_rules *rules, t_philo *philo);
+void		init_mutexes(t_rules *rules);
+
 void		*philo_life(void *arg);
+void		log_message(char *message, t_philo *philo);
+
 void		*death_handler(void *arg);
 int			check_death_signal(t_philo *philo);
-void		log_message(char *message, t_philo *philo);
+void		announce_death(t_rules *rules, t_philo *philo);
 
 long		get_time(void);
 void		ft_usleep(long int start_time, long int needed_time);

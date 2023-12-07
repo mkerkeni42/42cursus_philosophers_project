@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:15:19 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/05 15:20:12 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/07 13:02:37 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,13 @@ static int	create_philos(t_rules *rules)
 	}
 	pthread_create(&death, NULL, &death_handler, philo);
 	wait_for_threads(philo, rules, &death);
+	announce_death(rules, philo);
 	free_mutexes(rules, philo);
 	return (0);
 }
 
 static int	init_rules(t_rules *rules, int ac, char **av)
 {
-	int	i;
-
-	i = -1;
 	rules->start_time = get_time();
 	rules->death_signal = 0;
 	rules->nb_of_philo = ft_atol(av[1]);
@@ -83,12 +81,8 @@ static int	init_rules(t_rules *rules, int ac, char **av)
 	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philo);
 	if (!rules->forks)
 		return (EXIT_FAILURE);
-	rules->printer = malloc(sizeof(pthread_mutex_t));
-	rules->death_access = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(rules->printer, NULL);
-	pthread_mutex_init(rules->death_access, NULL);
-	while (++i < rules->nb_of_philo)
-		pthread_mutex_init(&rules->forks[i], NULL);
+	rules->running_threads = rules->nb_of_philo;
+	init_mutexes(rules);
 	return (EXIT_SUCCESS);
 }
 

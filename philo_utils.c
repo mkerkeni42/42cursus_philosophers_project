@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 14:11:02 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/05 09:38:11 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/07 13:03:39 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,4 @@ long int	ft_atol(const char *str)
 		i++;
 	}
 	return (result * sign);
-}
-
-void	free_mutexes(t_rules *rules, t_philo *philo)
-{
-	int	i;
-
-	i = -1;
-	pthread_mutex_destroy(rules->printer);
-	pthread_mutex_destroy(rules->death_access);
-	while (++i < rules->nb_of_philo)
-	{
-		pthread_mutex_destroy(philo[i].counter_access);
-		pthread_mutex_destroy(philo[i].meal_access);
-		pthread_mutex_destroy(&rules->forks[i]);
-		free(philo[i].counter_access);
-		free(philo[i].meal_access);
-	}
-	free(rules->forks);
-	free(rules->printer);
-	free(rules->death_access);
-	free(philo);
-	free(rules);
 }

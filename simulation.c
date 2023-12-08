@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:25:55 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/07 13:15:55 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/08 13:10:23 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,17 @@
 
 void	log_message(char *message, t_philo *philo)
 {
-	pthread_mutex_lock(philo->rules->printer);
-	printf("%ld %d %s\n", get_time() - philo->rules->start_time, \
-		philo->id, message);
-	pthread_mutex_unlock(philo->rules->printer);
+	pthread_mutex_lock(philo->rules->death_access);
+	if (philo->rules->death_signal == 0)
+	{
+		pthread_mutex_unlock(philo->rules->death_access);
+		pthread_mutex_lock(philo->rules->printer);
+		printf("%ld %d %s\n", get_time() - philo->rules->start_time, \
+			philo->id, message);
+		pthread_mutex_unlock(philo->rules->printer);
+		return ;
+	}
+	pthread_mutex_unlock(philo->rules->death_access);
 }
 
 static t_fork	*get_forks(t_philo *philo, t_fork *forks)
@@ -66,8 +73,11 @@ void	*philo_life(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (philo->eat_counter < philo->rules->min_eat_nb)
+	while (1)
 	{
+		if (philo->rules->min_eat_nb != -1
+			&& philo->eat_counter == philo->rules->min_eat_nb)
+			break ;
 		if (check_death_signal(philo))
 			break ;
 		if (philo->id % 2 == 0)
@@ -81,8 +91,5 @@ void	*philo_life(void *arg)
 		ft_usleep(philo->rules->start_time, philo->rules->time_to_sleep);
 		log_message("is thinking", philo);
 	}
-	pthread_mutex_lock(philo->rules->end_lock);
-	philo->rules->running_threads--;
-	pthread_mutex_unlock(philo->rules->end_lock);
 	return (NULL);
 }

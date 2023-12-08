@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:15:19 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/07 13:02:37 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/08 13:19:35 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ static int	create_philos(t_rules *rules)
 		if (pthread_create(&philo[i].thread, NULL, &philo_life, &philo[i]))
 			write(2, "Failed to create thread\n", 25);
 	}
-	pthread_create(&death, NULL, &death_handler, philo);
+	if (pthread_create(&death, NULL, &death_handler, philo))
+		write(2, "Failed to create thread\n", 25);
 	wait_for_threads(philo, rules, &death);
-	announce_death(rules, philo);
 	free_mutexes(rules, philo);
 	return (0);
 }
@@ -77,11 +77,10 @@ static int	init_rules(t_rules *rules, int ac, char **av)
 	if (ac == 6)
 		rules->min_eat_nb = ft_atol(av[5]);
 	else
-		rules->min_eat_nb = INT_MAX;
+		rules->min_eat_nb = -1;
 	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philo);
 	if (!rules->forks)
 		return (EXIT_FAILURE);
-	rules->running_threads = rules->nb_of_philo;
 	init_mutexes(rules);
 	return (EXIT_SUCCESS);
 }

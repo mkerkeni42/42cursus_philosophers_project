@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:16:17 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/07 13:09:42 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/08 13:18:51 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,9 @@ typedef struct s_rules {
 	int				min_eat_nb;
 	int				death_signal;
 	long int		start_time;
-	int				running_threads;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*printer;
 	pthread_mutex_t	*death_access;
-	pthread_mutex_t	*end_lock;
 }					t_rules;
 
 typedef struct s_philo {

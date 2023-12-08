@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 14:51:43 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/04 14:11:19 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/07 15:55:21 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,25 @@ static int	check_if_nb(char *arg)
 	return (EXIT_SUCCESS);
 }
 
+static int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
 static int	check_if_valid_nb(char *arg)
 {
 	long	nb;
 
+	if (ft_strlen(arg) > 10)
+	{
+		write(2, "ERROR: argument too big !\n", 26);
+		return (EXIT_FAILURE);
+	}
 	nb = ft_atol(arg);
 	if (nb < 0)
 	{

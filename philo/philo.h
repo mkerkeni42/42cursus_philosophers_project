@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:16:17 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/08 13:18:51 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/11 12:38:40 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef struct s_rules {
+typedef struct s_rules
+{
 	int				nb_of_philo;
 	long int		time_to_die;
 	long int		time_to_eat;
@@ -30,11 +31,12 @@ typedef struct s_rules {
 	int				death_signal;
 	long int		start_time;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	*printer;
-	pthread_mutex_t	*death_access;
+	pthread_mutex_t	printer;
+	pthread_mutex_t	death_access;
 }					t_rules;
 
-typedef struct s_philo {
+typedef struct s_philo
+{
 	int				id;
 	int				eat_counter;
 	long int		last_meal;
@@ -42,11 +44,12 @@ typedef struct s_philo {
 	t_rules			*rules;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*counter_access;
-	pthread_mutex_t	*meal_access;
+	pthread_mutex_t	counter_access;
+	pthread_mutex_t	meal_access;
 }					t_philo;
 
-typedef struct s_fork {
+typedef struct s_fork
+{
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
 }					t_fork;

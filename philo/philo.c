@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:15:19 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/08 13:19:35 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/11 12:39:39 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,8 @@ static int	create_philos(t_rules *rules)
 		philo[i].last_meal = get_time();
 		philo[i].id = i + 1;
 		philo[i].rules = rules;
-		philo[i].counter_access = malloc(sizeof(pthread_mutex_t));
-		philo[i].meal_access = malloc(sizeof(pthread_mutex_t));
-		pthread_mutex_init(philo[i].counter_access, NULL);
-		pthread_mutex_init(philo[i].meal_access, NULL);
+		pthread_mutex_init(&philo[i].counter_access, NULL);
+		pthread_mutex_init(&philo[i].meal_access, NULL);
 		get_forks(rules, philo, i);
 		if (pthread_create(&philo[i].thread, NULL, &philo_life, &philo[i]))
 			write(2, "Failed to create thread\n", 25);

@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:15:19 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/11 12:39:39 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/12 11:40:45 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 static void	get_forks(t_rules *rules, t_philo *philo, int i)
 {
-	philo[i].left_fork = &rules->forks[i];
+	philo[i].right_fork = NULL;
+	pthread_mutex_init(&philo[i].left_fork, NULL);
 	if (rules->nb_of_philo == 1)
 		philo[i].right_fork = NULL;
-	else if (i == 0)
-		philo[i].right_fork = &rules->forks[rules->nb_of_philo - 1];
+	else if (i == rules->nb_of_philo - 1)
+		philo[i].right_fork = &philo[0].left_fork;
 	else
-		philo[i].right_fork = &rules->forks[i - 1];
+		philo[i].right_fork = &philo[i + 1].left_fork;
 }
 
 static void	wait_for_threads(t_philo *philo, t_rules *rules, pthread_t *death)
@@ -76,10 +77,8 @@ static int	init_rules(t_rules *rules, int ac, char **av)
 		rules->min_eat_nb = ft_atol(av[5]);
 	else
 		rules->min_eat_nb = -1;
-	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->nb_of_philo);
-	if (!rules->forks)
-		return (EXIT_FAILURE);
-	init_mutexes(rules);
+	pthread_mutex_init(&rules->printer, NULL);
+	pthread_mutex_init(&rules->death_access, NULL);
 	return (EXIT_SUCCESS);
 }
 

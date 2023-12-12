@@ -6,13 +6,13 @@
 #    By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 12:09:59 by mkerkeni          #+#    #+#              #
-#    Updated: 2023/12/11 15:49:37 by mkerkeni         ###   ########.fr        #
+#    Updated: 2023/12/12 11:42:03 by mkerkeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -g3
 
 SRCS = 	philo.c \
 		philo_utils.c \
@@ -20,7 +20,6 @@ SRCS = 	philo.c \
 		simulation.c \
 		time.c \
 		death.c \
-		mutexes.c \
 
 OBJS = $(SRCS:.c=.o)
 

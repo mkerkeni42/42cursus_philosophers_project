@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 11:25:06 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/12 10:43:52 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/08 13:13:05 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ static int	check_last_meal(t_philo *philo)
 		pthread_mutex_lock(&philo->rules->death_access);
 		philo->rules->death_signal = 1;
 		pthread_mutex_unlock(&philo->rules->death_access);
+		pthread_mutex_lock(&philo->rules->printer);
 		printf("%ld %d died\n", get_time() - philo->rules->start_time, \
 			philo->id);
+		pthread_mutex_unlock(&philo->rules->printer);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->meal_access);

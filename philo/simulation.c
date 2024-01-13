@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:25:55 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/12/12 11:45:05 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/12/08 13:10:23 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,54 @@ void	log_message(char *message, t_philo *philo)
 	pthread_mutex_unlock(&philo->rules->death_access);
 }
 
-static int	eating(t_philo *philo)
+static t_fork	*get_forks(t_philo *philo, t_fork *forks)
 {
-	pthread_mutex_lock(&philo->left_fork);
-	log_message("has taken a fork", philo);
-	if (philo->right_fork)
+	if (philo->id % 2 == 0)
 	{
-		pthread_mutex_lock(philo->right_fork);
-		log_message("has taken a fork", philo);
-		log_message("is eating", philo);
-		pthread_mutex_lock(&philo->counter_access);
-		philo->eat_counter++;
-		pthread_mutex_unlock(&philo->counter_access);
-		pthread_mutex_lock(&philo->meal_access);
-		philo->last_meal = get_time();
-		pthread_mutex_unlock(&philo->meal_access);
-		ft_usleep(philo->rules->start_time, philo->rules->time_to_eat);
-		pthread_mutex_unlock(philo->right_fork);
+		forks->first_fork = philo->right_fork;
+		forks->second_fork = philo->left_fork;
 	}
 	else
 	{
-		pthread_mutex_unlock(&philo->left_fork);
+		forks->first_fork = philo->left_fork;
+		forks->second_fork = philo->right_fork;
+	}
+	return (forks);
+}
+
+static void	take_second_fork(t_philo *philo, t_fork *forks)
+{
+	pthread_mutex_lock(forks->second_fork);
+	log_message("has taken a fork", philo);
+	log_message("is eating", philo);
+	pthread_mutex_lock(&philo->counter_access);
+	philo->eat_counter++;
+	pthread_mutex_unlock(&philo->counter_access);
+	pthread_mutex_lock(&philo->meal_access);
+	philo->last_meal = get_time();
+	pthread_mutex_unlock(&philo->meal_access);
+	ft_usleep(philo->rules->start_time, philo->rules->time_to_eat);
+	pthread_mutex_unlock(forks->second_fork);
+	pthread_mutex_unlock(forks->first_fork);
+}
+
+static int	eating(t_philo *philo)
+{
+	t_fork	*forks;
+
+	forks = malloc(sizeof(t_fork));
+	forks = get_forks(philo, forks);
+	pthread_mutex_lock(forks->first_fork);
+	log_message("has taken a fork", philo);
+	if (philo->right_fork)
+		take_second_fork(philo, forks);
+	else
+	{
+		pthread_mutex_unlock(forks->first_fork);
+		free(forks);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->left_fork);
+	free(forks);
 	return (0);
 }
 

@@ -54,8 +54,8 @@ static void	take_second_fork(t_philo *philo, t_fork *forks)
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->meal_access);
 	ft_usleep(philo->rules->start_time, philo->rules->time_to_eat);
-	pthread_mutex_unlock(forks->second_fork);
 	pthread_mutex_unlock(forks->first_fork);
+	pthread_mutex_unlock(forks->second_fork);
 }
 
 static int	eating(t_philo *philo)

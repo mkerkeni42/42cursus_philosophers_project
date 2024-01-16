@@ -45,6 +45,8 @@ static int	create_philos(t_rules *rules)
 
 	i = -1;
 	philo = malloc(sizeof(t_philo) * rules->nb_of_philo);
+	if (!philo)
+		return (EXIT_FAILURE);
 	while (++i < rules->nb_of_philo)
 	{
 		philo[i].eat_counter = 0;
@@ -66,7 +68,7 @@ static int	create_philos(t_rules *rules)
 
 static int	init_rules(t_rules *rules, int ac, char **av)
 {
-	rules->start_time = get_time();
+	rules->start = get_time();
 	rules->death_signal = 0;
 	rules->nb_of_philo = ft_atol(av[1]);
 	rules->time_to_die = ft_atol(av[2]);
@@ -85,7 +87,7 @@ static int	init_rules(t_rules *rules, int ac, char **av)
 
 int	main(int ac, char **av)
 {
-	t_rules			*rules;
+	t_rules	*rules;
 
 	if (parsing(ac, av))
 		return (EXIT_FAILURE);

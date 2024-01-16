@@ -34,7 +34,7 @@ static int	check_last_meal(t_philo *philo)
 		philo->rules->death_signal = 1;
 		pthread_mutex_unlock(&philo->rules->death_access);
 		pthread_mutex_lock(&philo->rules->printer);
-		printf("%ld %d died\n", get_time() - philo->rules->start_time, \
+		printf("%ld %d died\n", get_time() - philo->rules->start, \
 			philo->id);
 		pthread_mutex_unlock(&philo->rules->printer);
 		return (1);

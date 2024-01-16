@@ -62,7 +62,7 @@ static int	check_if_valid_nb(char *arg)
 	}
 	if (nb == 0)
 	{
-		write(2, "ERROR: argument cannot be zero !\n", 34);
+		write(2, "ERROR: argument cannot be zero !\n", 33);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -87,7 +87,7 @@ int	parsing(int ac, char **av)
 	}
 	if (ft_atol(av[1]) > 200)
 	{
-		write(2, "ERROR: more than 200 philosophers not allowed !\n", 49);
+		write(2, "ERROR: more than 200 philosophers not allowed !\n", 48);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

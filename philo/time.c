@@ -22,11 +22,33 @@ long	get_time(void)
 	return (time);
 }
 
-void	ft_usleep(long int start_time, long int needed_time)
+void	ft_usleep(long int start, long int time, t_philo *philo)
 {
 	long int	elapsed_time;
 
-	elapsed_time = get_time() - start_time;
-	while (get_time() - start_time < elapsed_time + needed_time)
-		usleep(10);
+	elapsed_time = get_time() - start;
+	while (get_time() - start < elapsed_time + time)
+	{
+		if (check_death_signal(philo))
+			break ;
+		usleep(200);
+	}
+}
+
+void	sleep_odd_philo(t_philo *philo, int x)
+{
+	if (philo->rules->nb_of_philo % 2)
+	{
+		if (x == 0)
+		{
+			if (philo->right_fork && philo->id == philo->rules->nb_of_philo)
+				ft_usleep(philo->rules->start, philo->rules->time_to_eat * 2, \
+				philo);
+		}
+		else if (x == 1)
+		{
+			ft_usleep(philo->rules->start, (philo->rules->time_to_eat \
+			- philo->rules->time_to_sleep) * 2, philo);
+		}
+	}
 }

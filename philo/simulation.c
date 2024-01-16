@@ -19,7 +19,7 @@ void	log_message(char *message, t_philo *philo)
 	{
 		pthread_mutex_unlock(&philo->rules->death_access);
 		pthread_mutex_lock(&philo->rules->printer);
-		printf("%ld %d %s\n", get_time() - philo->rules->start_time, \
+		printf("%ld %d %s\n", get_time() - philo->rules->start, \
 			philo->id, message);
 		pthread_mutex_unlock(&philo->rules->printer);
 		return ;
@@ -53,9 +53,9 @@ static void	take_second_fork(t_philo *philo, t_fork *forks)
 	pthread_mutex_lock(&philo->meal_access);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->meal_access);
-	ft_usleep(philo->rules->start_time, philo->rules->time_to_eat);
-	pthread_mutex_unlock(forks->second_fork);
+	ft_usleep(philo->rules->start, philo->rules->time_to_eat, philo);
 	pthread_mutex_unlock(forks->first_fork);
+	pthread_mutex_unlock(forks->second_fork);
 }
 
 static int	eating(t_philo *philo)
@@ -83,6 +83,7 @@ void	*philo_life(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	sleep_odd_philo(philo, 0);
 	while (1)
 	{
 		if (check_death_signal(philo))
@@ -99,7 +100,8 @@ void	*philo_life(void *arg)
 		if (eating(philo))
 			break ;
 		log_message("is sleeping", philo);
-		ft_usleep(philo->rules->start_time, philo->rules->time_to_sleep);
+		ft_usleep(philo->rules->start, philo->rules->time_to_sleep, philo);
+		sleep_odd_philo(philo, 1);
 		log_message("is thinking", philo);
 	}
 	return (NULL);

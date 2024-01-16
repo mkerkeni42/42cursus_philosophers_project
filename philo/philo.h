@@ -29,7 +29,7 @@ typedef struct s_rules
 	long int		time_to_sleep;
 	int				min_eat_nb;
 	int				death_signal;
-	long int		start_time;
+	long int		start;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	printer;
 	pthread_mutex_t	death_access;
@@ -70,6 +70,7 @@ void		*death_handler(void *arg);
 int			check_death_signal(t_philo *philo);
 
 long		get_time(void);
-void		ft_usleep(long int start_time, long int needed_time);
+void		ft_usleep(long int start, long int time, t_philo *philo);
+void		sleep_odd_philo(t_philo *philo, int x);
 
 #endif

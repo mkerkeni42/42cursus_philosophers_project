@@ -83,7 +83,6 @@ void	*philo_life(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	sleep_odd_philo(philo, 0);
 	while (1)
 	{
 		if (check_death_signal(philo))
@@ -101,7 +100,7 @@ void	*philo_life(void *arg)
 			break ;
 		log_message("is sleeping", philo);
 		ft_usleep(philo->rules->start, philo->rules->time_to_sleep, philo);
-		sleep_odd_philo(philo, 1);
+		sleep_odd_philo(philo);
 		log_message("is thinking", philo);
 	}
 	return (NULL);
